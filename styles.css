@@ -1714,3 +1714,16 @@ kbd {
     .platform-card .mockup-container { display: none; }
     .kpi-card { height: auto; padding: 15px; }
 }
+
+/* Prototype Demo Link Hover styles */
+.launch-demo-btn:hover {
+    background: var(--accent-green) !important;
+    color: #000 !important;
+    box-shadow: 0 0 15px rgba(0, 245, 118, 0.4);
+    border-color: var(--accent-green) !important;
+}
+
+.launch-demo-btn:hover i {
+    fill: #000 !important;
+    color: #000 !important;
+}

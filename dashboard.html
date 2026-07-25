@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarbonWise - Interactive Product Model</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Styles -->
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar glass-card">
+            <div class="sidebar-brand">
+                <i data-lucide="shield-alert" class="logo-icon"></i>
+                <div class="logo-text">
+                    <h2>Carbon<span>Wise</span></h2>
+                    <span class="sub">PRODUCT PROTOTYPE</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <button class="nav-item active" id="btnConsumer">
+                    <i data-lucide="home"></i>
+                    <span>Consumer Advisor</span>
+                </button>
+                <button class="nav-item" id="btnCity">
+                    <i data-lucide="map"></i>
+                    <span>City Emissions Grid</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="connection-status">
+                    <span class="status-indicator online"></span>
+                    <span>AI Engine Connected</span>
+                </div>
+                <a href="index.html" class="back-presentation-btn">
+                    <i data-lucide="arrow-left-circle"></i>
+                    <span>Back to Slides</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="app-header glass-card">
+                <div class="header-left">
+                    <h1 id="pageTitle">Consumer Portal</h1>
+                    <p id="pageDescription">Optimize household appliance runtime based on real-time grid carbon forecast.</p>
+                </div>
+                <div class="header-right">
+                    <div class="header-metric">
+                        <span class="lbl">Grid Source</span>
+                        <span class="val accent-green"><i data-lucide="zap"></i> 72% Solar/Wind</span>
+                    </div>
+                    <div class="header-metric">
+                        <span class="lbl">Carbon Intensity</span>
+                        <span class="val warning" id="headerIntensity">210 g/kWh</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- CONSUMER VIEW -->
+            <div class="view-container active" id="consumerPortal">
+                <!-- KPI Dashboard Row -->
+                <div class="kpi-row">
+                    <div class="kpi-card glass-card">
+                        <div class="kpi-header">
+                            <span>CO2 REDUCTION</span>
+                            <i data-lucide="leaf" class="accent-green"></i>
+                        </div>
+                        <div class="kpi-body">
+                            <span class="metric-value" id="kpiCo2">12.4</span>
+                            <span class="metric-unit">kg CO2</span>
+                        </div>
+                        <div class="kpi-footer">
+                            <span class="trend positive"><i data-lucide="trending-up"></i> +14% vs last week</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card glass-card">
+                        <div class="kpi-header">
+                            <span>ENERGY SHIFTED</span>
+                            <i data-lucide="arrow-left-right" class="accent-cyan"></i>
+                        </div>
+                        <div class="kpi-body">
+                            <span class="metric-value" id="kpiShifted">48.2</span>
+                            <span class="metric-unit">kWh</span>
+                        </div>
+                        <div class="kpi-footer">
+                            <span class="trend positive"><i data-lucide="trending-up"></i> 82% efficiency</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card glass-card">
+                        <div class="kpi-header">
+                            <span>COST SAVED</span>
+                            <i data-lucide="dollar-sign" class="accent-green"></i>
+                        </div>
+                        <div class="kpi-body">
+                            <span class="metric-value" id="kpiCost">8.95</span>
+                            <span class="metric-unit">USD</span>
+                        </div>
+                        <div class="kpi-footer">
+                            <span class="trend positive"><i data-lucide="info"></i> At peak utility tariff</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Grid Split -->
+                <div class="dashboard-split">
+                    <!-- Left Pane: Appliance Management -->
+                    <div class="glass-card panel-card">
+                        <div class="panel-header">
+                            <h3>Smart Appliance Automations</h3>
+                            <span class="sub">Toggle Auto-Pilot to let AI schedule runtime during clean windows automatically.</span>
+                        </div>
+                        
+                        <div class="appliance-list">
+                            <!-- Appliance 1 -->
+                            <div class="appliance-card" id="appliance-ev">
+                                <div class="appliance-info">
+                                    <div class="appliance-icon-wrapper">
+                                        <i data-lucide="car"></i>
+                                    </div>
+                                    <div class="appliance-meta">
+                                        <h4>Electric Vehicle Charger</h4>
+                                        <p class="schedule-status">Status: <span class="status-text dirty">Charging Now (High carbon period)</span></p>
+                                    </div>
+                                </div>
+                                <div class="appliance-controls">
+                                    <span class="time-suggest" id="ev-time">Est: 5:00 PM</span>
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggle-ev">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Appliance 2 -->
+                            <div class="appliance-card" id="appliance-laundry">
+                                <div class="appliance-info">
+                                    <div class="appliance-icon-wrapper">
+                                        <i data-lucide="洗衣机" style="display: none;"></i> <!-- fallback -->
+                                        <i data-lucide="wind"></i>
+                                    </div>
+                                    <div class="appliance-meta">
+                                        <h4>Smart Washing Machine</h4>
+                                        <p class="schedule-status">Status: <span class="status-text idle">Waiting for scheduling</span></p>
+                                    </div>
+                                </div>
+                                <div class="appliance-controls">
+                                    <span class="time-suggest" id="laundry-time">Est: User manual</span>
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggle-laundry">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Appliance 3 -->
+                            <div class="appliance-card" id="appliance-hvac">
+                                <div class="appliance-info">
+                                    <div class="appliance-icon-wrapper">
+                                        <i data-lucide="thermometer"></i>
+                                    </div>
+                                    <div class="appliance-meta">
+                                        <h4>Residential HVAC / AC</h4>
+                                        <p class="schedule-status">Status: <span class="status-text running">Running cooling cycle</span></p>
+                                    </div>
+                                </div>
+                                <div class="appliance-controls">
+                                    <span class="time-suggest" id="hvac-time">Temp: 22°C</span>
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggle-hvac">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Pane: Live Forecast graph -->
+                    <div class="glass-card chart-card">
+                        <div class="chart-header-container">
+                            <div>
+                                <h3>Grid Carbon Intensity (24h Forecast)</h3>
+                                <p class="sub">Highlighted green region indicates the optimized Clean Energy Window.</p>
+                            </div>
+                            <div class="chart-legend">
+                                <span class="legend-item"><span class="legend-dot red"></span> Dirty Peak</span>
+                                <span class="legend-item"><span class="legend-dot green"></span> Clean Window</span>
+                            </div>
+                        </div>
+                        
+                        <div class="svg-chart-container">
+                            <svg viewBox="0 0 500 200" class="forecast-svg">
+                                <defs>
+                                    <!-- Gradients -->
+                                    <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="var(--accent-green)" stop-opacity="0.3"/>
+                                        <stop offset="100%" stop-color="var(--accent-green)" stop-opacity="0"/>
+                                    </linearGradient>
+                                    <linearGradient id="peakGlow" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="var(--accent-red)" stop-opacity="0.2"/>
+                                        <stop offset="100%" stop-color="var(--accent-red)" stop-opacity="0"/>
+                                    </linearGradient>
+                                </defs>
+                                <!-- Grid Lines -->
+                                <line x1="40" y1="20" x2="480" y2="20" stroke="rgba(255,255,255,0.03)"/>
+                                <line x1="40" y1="70" x2="480" y2="70" stroke="rgba(255,255,255,0.03)"/>
+                                <line x1="40" y1="120" x2="480" y2="120" stroke="rgba(255,255,255,0.03)"/>
+                                <line x1="40" y1="170" x2="480" y2="170" stroke="rgba(255,255,255,0.08)"/>
+                                
+                                <!-- Clean Energy Window Bounding Box -->
+                                <rect x="220" y="20" width="160" height="150" fill="url(#chartGlow)" stroke="rgba(0, 245, 118, 0.2)" stroke-dasharray="4 4" />
+                                <text x="300" y="40" fill="var(--accent-green)" font-size="8" text-anchor="middle" font-weight="700">CLEAN WINDOW</text>
+
+                                <!-- Dirty Energy Peak Bounding Box -->
+                                <rect x="40" y="20" width="120" height="150" fill="url(#peakGlow)" stroke="rgba(255, 56, 56, 0.15)" stroke-dasharray="4 4" />
+
+                                <!-- Chart Path -->
+                                <!-- Coordinates map hours 0 to 24.
+                                     0h: (40, 40) - Dirty coal peak
+                                     4h: (120, 60)
+                                     8h: (200, 140) - Solar ramps up
+                                     12h: (280, 160) - Solar peak (Cleanest)
+                                     16h: (360, 120) - Solar fades
+                                     20h: (440, 50) - Evening peak load
+                                     24h: (480, 80)
+                                -->
+                                <path d="M 40 40 C 100 45, 150 90, 200 135 C 240 170, 320 170, 360 120 C 400 70, 430 40, 480 80" 
+                                      fill="none" stroke="url(#lineGradient)" stroke-width="3" id="forecastLine" />
+                                
+                                <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
+                                    <stop offset="0%" stop-color="var(--accent-red)"/>
+                                    <stop offset="35%" stop-color="#eab308"/>
+                                    <stop offset="60%" stop-color="var(--accent-green)"/>
+                                    <stop offset="80%" stop-color="#eab308"/>
+                                    <stop offset="100%" stop-color="var(--accent-red)"/>
+                                </linearGradient>
+
+                                <!-- Nodes on Path -->
+                                <circle cx="280" cy="160" r="5" fill="var(--accent-green)" id="chartNodeClean"/>
+                                <circle cx="60" cy="40" r="5" fill="var(--accent-red)" id="chartNodeDirty"/>
+
+                                <!-- Text labels -->
+                                <text x="35" y="175" fill="var(--text-secondary)" font-size="8" text-anchor="end">0 g</text>
+                                <text x="35" y="125" fill="var(--text-secondary)" font-size="8" text-anchor="end">150 g</text>
+                                <text x="35" y="75" fill="var(--text-secondary)" font-size="8" text-anchor="end">300 g</text>
+                                <text x="35" y="25" fill="var(--text-secondary)" font-size="8" text-anchor="end">450 g</text>
+
+                                <text x="40" y="185" fill="var(--text-muted)" font-size="8" text-anchor="middle">12 AM</text>
+                                <text x="120" y="185" fill="var(--text-muted)" font-size="8" text-anchor="middle">4 AM</text>
+                                <text x="200" y="185" fill="var(--text-muted)" font-size="8" text-anchor="middle">8 AM</text>
+                                <text x="280" y="185" fill="var(--text-muted)" font-size="8" text-anchor="middle">12 PM</text>
+                                <text x="360" y="185" fill="var(--text-muted)" font-size="8" text-anchor="middle">4 PM</text>
+                                <text x="440" y="185" fill="var(--text-muted)" font-size="8" text-anchor="middle">8 PM</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SMART CITY VIEW -->
+            <div class="view-container" id="cityPortal">
+                <!-- KPI Dashboard Row -->
+                <div class="kpi-row">
+                    <div class="kpi-card glass-card">
+                        <div class="kpi-header">
+                            <span>PHYSICAL SENSORS</span>
+                            <i data-lucide="radio" class="accent-cyan"></i>
+                        </div>
+                        <div class="kpi-body">
+                            <span class="metric-value">4</span>
+                            <span class="metric-unit">Hardware Nodes</span>
+                        </div>
+                        <div class="kpi-footer">
+                            <span class="trend neutral">99.8% Uptime</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card glass-card">
+                        <div class="kpi-header">
+                            <span>VIRTUAL INTERPOLATIONS</span>
+                            <i data-lucide="binary" class="accent-green"></i>
+                        </div>
+                        <div class="kpi-body">
+                            <span class="metric-value" id="kpiVirtual">0</span>
+                            <span class="metric-unit">AI Nodes</span>
+                        </div>
+                        <div class="kpi-footer">
+                            <span class="trend positive" id="kpiSavingsCity">90% Cost Saving</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card glass-card">
+                        <div class="kpi-header">
+                            <span>UNMASKED HOTSPOTS</span>
+                            <i data-lucide="alert-triangle" class="accent-red"></i>
+                        </div>
+                        <div class="kpi-body">
+                            <span class="metric-value" id="kpiHotspots">0</span>
+                            <span class="metric-unit">High Pollution Zones</span>
+                        </div>
+                        <div class="kpi-footer">
+                            <span class="trend negative" id="kpiHotspotSub">Hotspots Hidden</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Grid Split -->
+                <div class="dashboard-split">
+                    <!-- Left Pane: GIS Controller -->
+                    <div class="glass-card panel-card control-panel-city">
+                        <div class="panel-header">
+                            <h3>Emissions Mapping Controller</h3>
+                            <p class="sub">Traditional grids require hundreds of hardware nodes. CarbonWise uses 90% fewer physical nodes, filling the gaps using an AI Kriging Spatial Interpolation model.</p>
+                        </div>
+                        
+                        <div class="control-actions">
+                            <div class="ai-toggle-box glass-card">
+                                <div class="toggle-meta">
+                                    <h4>AI Spatial Interpolation</h4>
+                                    <p>Predicts grid-wide carbon footprint based on sparse sensor inputs.</p>
+                                </div>
+                                <label class="switch large">
+                                    <input type="checkbox" id="toggleCityAI">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="map-stats" id="mapStatsPanel" style="opacity: 0.5;">
+                                <h4>Hotspot Telemetry Report</h4>
+                                <ul class="telemetry-list">
+                                    <li><span>Hotspot Alpha (Industrial Zone):</span> <strong class="accent-red" id="telemetryAlpha">--</strong></li>
+                                    <li><span>Hotspot Beta (Traffic Corridor):</span> <strong class="accent-red" id="telemetryBeta">--</strong></li>
+                                    <li><span>Model Confidence (R²):</span> <strong class="accent-green">0.94</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Pane: GIS Grid Map -->
+                    <div class="glass-card map-card-pane">
+                        <div class="map-header">
+                            <h3>City Spatial Emissions Map</h3>
+                            <div class="map-legend">
+                                <span class="leg-item"><span class="leg-box active-sensor"></span> Physical Node</span>
+                                <span class="leg-item"><span class="leg-box virtual-sensor"></span> Interpolated Node</span>
+                            </div>
+                        </div>
+
+                        <!-- 10x10 Grid representation of City Map -->
+                        <div class="gis-grid-container">
+                            <div class="gis-grid" id="gisGrid">
+                                <!-- Cells will be generated by script -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="dashboard-script.js"></script>
+</body>
+</html>
