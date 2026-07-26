@@ -44,7 +44,11 @@ docker run -p 8080:8080 carbonwise-backend
 ### Render Deployment
 1. Connect GitHub repository
 2. Set runtime: Java 17
-3. Build command: `./mvnw spring-boot:run`
+3. Root directory: `carbonwise-backend`
+
+Build command: `mvn clean package -DskipTests`
+
+Start command: `java -jar target/carbonwise-backend-1.0.0.jar`
 4. Set environment variables in Render dashboard
 5. Deploy
 
