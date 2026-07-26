@@ -175,10 +175,20 @@ flutter run
 ```
 
 ### Backend
+The `pom.xml` and Spring Boot Maven plugin are inside `carbonwise-backend`. Always change into that directory before invoking Maven (or use the helper below); running `mvn spring-boot:run` from the repository root causes Maven's `No plugin found for prefix 'spring-boot'` error.
+
 ```bash
 cd carbonwise-backend
-./mvnw spring-boot:run
+mvn spring-boot:run
+# Backend: http://localhost:8080
 ```
+
+To start the backend and Flutter frontend together, from the repository root run:
+
+```bash
+./scripts/start-dev.sh
+```
+The helper verifies that port 8080 is listening before starting Flutter. Stop both processes with `Ctrl+C`.
 
 ### AI Server
 ```bash
