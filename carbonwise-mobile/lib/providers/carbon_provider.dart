@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../core/services/api_service.dart';
+import '../repositories/carbon_repository.dart';
 import '../models/carbon_intensity_model.dart';
 
 class CarbonProvider extends ChangeNotifier {
-  final ApiService _apiService;
+  final CarbonRepository _repository;
   CarbonIntensity? _liveIntensity;
   List<CarbonIntensity> _history = [];
   bool _isLoading = false;
   String? _error;
 
-  CarbonProvider(this._apiService);
+  CarbonProvider(this._repository);
 
   CarbonIntensity? get liveIntensity => _liveIntensity;
   List<CarbonIntensity> get history => _history;
@@ -21,8 +21,7 @@ class CarbonProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _apiService.get('/api/consumer/carbon/live');
-      _liveIntensity = CarbonIntensity.fromJson(response.data);
+      _liveIntensity = await _repository.fetchLiveIntensity();
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -37,13 +36,7 @@ class CarbonProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _apiService.get(
-        '/api/consumer/carbon/history',
-        queryParameters: {'days': days},
-      );
-      _history = (response.data as List)
-          .map((e) => CarbonIntensity.fromJson(e))
-          .toList();
+      _history = await _repository.fetchCarbonHistory(days: days);
       _isLoading = false;
       notifyListeners();
     } catch (e) {

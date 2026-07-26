@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../core/services/auth_service.dart';
+import '../repositories/auth_repository.dart';
 import '../models/user_model.dart';
 
 class AuthProvider extends ChangeNotifier {
-  final AuthService _authService;
+  final AuthRepository _authRepository;
   User? _user;
   bool _isLoading = false;
   bool _isAuthenticated = false;
   String? _error;
 
-  AuthProvider(this._authService);
+  AuthProvider(this._authRepository);
 
   User? get user => _user;
   bool get isLoading => _isLoading;
@@ -22,8 +22,8 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final data = await _authService.login(email: email, password: password);
-      _user = User.fromJson(data['user']);
+      final data = await _authRepository.login(email, password);
+      _user = _authRepository.parseUser(data['user']);
       _isAuthenticated = true;
       _isLoading = false;
       notifyListeners();
@@ -42,12 +42,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final data = await _authService.register(
-        name: name,
-        email: email,
-        password: password,
-        role: role,
-      );
+      await _authRepository.register(name, email, password, role);
       _isLoading = false;
       notifyListeners();
       return true;
@@ -61,7 +56,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future<bool> verifyOTP(String email, String otp) async {
     try {
-      return await _authService.verifyOTP(email: email, otp: otp);
+      return await _authRepository.verifyOTP(email, otp);
     } catch (e) {
       _error = e.toString();
       notifyListeners();
@@ -70,14 +65,14 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> logout() async {
-    await _authService.logout();
+    await _authRepository.logout();
     _user = null;
     _isAuthenticated = false;
     notifyListeners();
   }
 
   Future<void> checkAuth() async {
-    final auth = await _authService.isAuthenticated();
+    final auth = await _authRepository.isAuthenticated();
     _isAuthenticated = auth;
     notifyListeners();
   }

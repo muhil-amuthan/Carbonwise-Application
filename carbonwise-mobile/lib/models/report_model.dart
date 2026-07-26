@@ -1,7 +1,7 @@
 class Report {
   final String id;
   final String userId;
-  final String type; // DAILY, WEEKLY, MONTHLY
+  final String type;
   final DateTime startDate;
   final DateTime endDate;
   final double totalCarbonUsed;
@@ -41,8 +41,7 @@ class Report {
       deviceCount: json['deviceCount'] ?? 0,
       deviceStatistics: (json['deviceStatistics'] as List?)
               ?.map((e) => DeviceStatistic.fromJson(e))
-              .toList() ??
-          [],
+              .toList() ?? [],
       pdfUrl: json['pdfUrl'],
     );
   }

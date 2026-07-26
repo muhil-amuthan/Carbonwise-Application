@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import '../core/services/api_service.dart';
+import '../repositories/device_repository.dart';
 import '../models/device_model.dart';
 
 class DeviceProvider extends ChangeNotifier {
-  final ApiService _apiService;
+  final DeviceRepository _repository;
   List<Device> _devices = [];
   bool _isLoading = false;
   String? _error;
 
-  DeviceProvider(this._apiService);
+  DeviceProvider(this._repository);
 
   List<Device> get devices => _devices;
   bool get isLoading => _isLoading;
@@ -19,10 +19,7 @@ class DeviceProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _apiService.get('/api/device');
-      _devices = (response.data as List)
-          .map((e) => Device.fromJson(e))
-          .toList();
+      _devices = await _repository.fetchDevices();
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -34,7 +31,7 @@ class DeviceProvider extends ChangeNotifier {
 
   Future<bool> addDevice(Map<String, dynamic> deviceData) async {
     try {
-      await _apiService.post('/api/device', data: deviceData);
+      await _repository.addDevice(deviceData);
       await fetchDevices();
       return true;
     } catch (e) {
@@ -46,7 +43,7 @@ class DeviceProvider extends ChangeNotifier {
 
   Future<bool> updateDevice(String id, Map<String, dynamic> deviceData) async {
     try {
-      await _apiService.put('/api/device/$id', data: deviceData);
+      await _repository.updateDevice(id, deviceData);
       await fetchDevices();
       return true;
     } catch (e) {
@@ -58,7 +55,7 @@ class DeviceProvider extends ChangeNotifier {
 
   Future<bool> deleteDevice(String id) async {
     try {
-      await _apiService.delete('/api/device/$id');
+      await _repository.deleteDevice(id);
       await fetchDevices();
       return true;
     } catch (e) {

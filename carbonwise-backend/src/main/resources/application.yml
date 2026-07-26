@@ -4,13 +4,11 @@ server:
 spring:
   application:
     name: carbonwise-backend
-
   datasource:
     url: jdbc:postgresql://localhost:5432/carbonwise
     username: carbonwise
     password: carbonwise123
     driver-class-name: org.postgresql.Driver
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -19,7 +17,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-
   mail:
     host: smtp.gmail.com
     port: 587
@@ -29,23 +26,19 @@ spring:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
 
-# JWT Configuration
 jwt:
   secret: ${JWT_SECRET:carbonwise-secret-key-change-in-production}
-  expiration: 86400000    # 24 hours in milliseconds
-  refresh-expiration: 604800000  # 7 days
+  expiration: 86400000
+  refresh-expiration: 604800000
 
-# MQTT Configuration
 mqtt:
   broker: tcp://localhost:1883
   client-id: carbonwise-backend
   topic-prefix: carbonwise/
 
-# AI Server
 ai:
   server-url: http://localhost:5000
 
-# Logging
 logging:
   level:
     com.carbonwise: DEBUG

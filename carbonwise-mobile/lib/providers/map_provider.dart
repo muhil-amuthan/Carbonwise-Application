@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../core/services/api_service.dart';
+import '../repositories/map_repository.dart';
 
 class MapProvider extends ChangeNotifier {
-  final ApiService _apiService;
+  final MapRepository _repository;
   List<Map<String, dynamic>> _heatmapData = [];
   List<Map<String, dynamic>> _sensorLocations = [];
   List<Map<String, dynamic>> _highRiskZones = [];
   bool _isLoading = false;
   String? _error;
 
-  MapProvider(this._apiService);
+  MapProvider(this._repository);
 
   List<Map<String, dynamic>> get heatmapData => _heatmapData;
   List<Map<String, dynamic>> get sensorLocations => _sensorLocations;
@@ -22,8 +22,7 @@ class MapProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _apiService.get('/api/gis/heatmap/carbon');
-      _heatmapData = List<Map<String, dynamic>>.from(response.data);
+      _heatmapData = await _repository.fetchCarbonHeatmap();
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -35,8 +34,7 @@ class MapProvider extends ChangeNotifier {
 
   Future<void> fetchSensorLocations() async {
     try {
-      final response = await _apiService.get('/api/gis/sensors');
-      _sensorLocations = List<Map<String, dynamic>>.from(response.data);
+      _sensorLocations = await _repository.fetchSensorLocations();
       notifyListeners();
     } catch (e) {
       _error = e.toString();
@@ -46,8 +44,7 @@ class MapProvider extends ChangeNotifier {
 
   Future<void> fetchHighRiskZones() async {
     try {
-      final response = await _apiService.get('/api/gis/risk-zones');
-      _highRiskZones = List<Map<String, dynamic>>.from(response.data);
+      _highRiskZones = await _repository.fetchHighRiskZones();
       notifyListeners();
     } catch (e) {
       _error = e.toString();

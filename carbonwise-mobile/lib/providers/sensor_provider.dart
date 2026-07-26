@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import '../core/services/api_service.dart';
+import '../repositories/sensor_repository.dart';
 import '../models/sensor_model.dart';
 
 class SensorProvider extends ChangeNotifier {
-  final ApiService _apiService;
-  List<Sensor> _sensors = [];
+  final SensorRepository _repository;
   List<SensorData> _liveData = [];
   bool _isLoading = false;
   String? _error;
 
-  SensorProvider(this._apiService);
+  SensorProvider(this._repository);
 
-  List<Sensor> get sensors => _sensors;
   List<SensorData> get liveData => _liveData;
   bool get isLoading => _isLoading;
   String? get error => _error;
@@ -21,10 +19,7 @@ class SensorProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _apiService.get('/api/sensor/live');
-      _liveData = (response.data as List)
-          .map((e) => SensorData.fromJson(e))
-          .toList();
+      _liveData = await _repository.fetchLiveSensorData();
       _isLoading = false;
       notifyListeners();
     } catch (e) {

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../core/services/api_service.dart';
+import '../repositories/notification_repository.dart';
 import '../models/notification_model.dart';
 
 class NotificationProvider extends ChangeNotifier {
-  final ApiService _apiService;
+  final NotificationRepository _repository;
   List<CarbonNotification> _notifications = [];
   int _unreadCount = 0;
   bool _isLoading = false;
   String? _error;
 
-  NotificationProvider(this._apiService);
+  NotificationProvider(this._repository);
 
   List<CarbonNotification> get notifications => _notifications;
   int get unreadCount => _unreadCount;
@@ -21,10 +21,7 @@ class NotificationProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _apiService.get('/api/notifications');
-      _notifications = (response.data as List)
-          .map((e) => CarbonNotification.fromJson(e))
-          .toList();
+      _notifications = await _repository.fetchNotifications();
       _unreadCount = _notifications.where((n) => !n.isRead).length;
       _isLoading = false;
       notifyListeners();
@@ -37,7 +34,7 @@ class NotificationProvider extends ChangeNotifier {
 
   Future<void> markAsRead(String notificationId) async {
     try {
-      await _apiService.put('/api/notifications/$notificationId/read');
+      await _repository.markAsRead(notificationId);
       final index = _notifications.indexWhere((n) => n.id == notificationId);
       if (index != -1) {
         _notifications[index] = CarbonNotification(

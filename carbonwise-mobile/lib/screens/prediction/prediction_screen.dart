@@ -11,7 +11,7 @@ class PredictionScreen extends StatefulWidget {
 }
 
 class _PredictionScreenState extends State<PredictionScreen> {
-  int _selectedTab = 0; // 0: 6h, 1: 12h, 2: 24h
+  int _selectedTab = 0;
 
   @override
   void initState() {
@@ -27,89 +27,40 @@ class _PredictionScreenState extends State<PredictionScreen> {
       appBar: AppBar(title: const Text('Carbon Prediction')),
       body: Column(
         children: [
-          // Tab Selector
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                _buildTimeTab('6 Hours', 0),
-                const SizedBox(width: 8),
-                _buildTimeTab('12 Hours', 1),
-                const SizedBox(width: 8),
-                _buildTimeTab('24 Hours', 2),
-              ],
-            ),
+            child: Row(children: [
+              _buildTimeTab('6 Hours', 0),
+              const SizedBox(width: 8),
+              _buildTimeTab('12 Hours', 1),
+              const SizedBox(width: 8),
+              _buildTimeTab('24 Hours', 2),
+            ]),
           ),
-
-          // Prediction Content
           Expanded(
             child: Consumer<PredictionProvider>(
               builder: (context, provider, _) {
-                if (provider.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                final prediction = _selectedTab == 0
-                    ? provider.prediction6h
-                    : _selectedTab == 1
-                        ? provider.prediction12h
-                        : provider.prediction24h;
-
-                if (prediction == null) {
-                  return const Center(
-                    child: Text('No prediction data available'),
-                  );
-                }
-
+                if (provider.isLoading) return const Center(child: CircularProgressIndicator());
+                final prediction = _selectedTab == 0 ? provider.prediction6h : _selectedTab == 1 ? provider.prediction12h : provider.prediction24h;
+                if (prediction == null) return const Center(child: Text('No prediction data available'));
                 return SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Best Time Cards
-                      _buildBestTimeCard(
-                        'Best EV Charging Time',
-                        prediction.bestChargingTime,
-                        Icons.ev_station,
-                        AppTheme.primaryGreen,
-                      ),
+                      _buildBestTimeCard('Best EV Charging Time', prediction.bestChargingTime, Icons.ev_station, AppTheme.primaryGreen),
                       const SizedBox(height: 12),
-                      _buildBestTimeCard(
-                        'Best Appliance Time',
-                        prediction.bestApplianceTime,
-                        Icons.schedule,
-                        AppTheme.primaryCyan,
-                      ),
+                      _buildBestTimeCard('Best Appliance Time', prediction.bestApplianceTime, Icons.schedule, AppTheme.primaryCyan),
                       const SizedBox(height: 24),
-
-                      // AI Recommendation
                       Card(
                         child: Padding(
                           padding: const EdgeInsets.all(20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.smart_toy, color: AppTheme.primaryGreen),
-                                  const SizedBox(width: 8),
-                                  const Text(
-                                    'AI Recommendation',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              Row(children: [Icon(Icons.smart_toy, color: AppTheme.primaryGreen), const SizedBox(width: 8), const Text('AI Recommendation', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))]),
                               const SizedBox(height: 12),
-                              Text(
-                                prediction.recommendation,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white70,
-                                ),
-                              ),
+                              Text(prediction.recommendation, style: const TextStyle(fontSize: 14, color: Colors.white70)),
                             ],
                           ),
                         ),
@@ -133,22 +84,11 @@ class _PredictionScreenState extends State<PredictionScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected
-                ? AppTheme.primaryGreen.withOpacity(0.15)
-                : Colors.white.withOpacity(0.05),
+            color: isSelected ? AppTheme.primaryGreen.withOpacity(0.15) : Colors.white.withOpacity(0.05),
             borderRadius: BorderRadius.circular(12),
-            border: isSelected
-                ? Border.all(color: AppTheme.primaryGreen)
-                : Border.all(color: Colors.white.withOpacity(0.08)),
+            border: isSelected ? Border.all(color: AppTheme.primaryGreen) : Border.all(color: Colors.white.withOpacity(0.08)),
           ),
-          child: Text(
-            label,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-              color: isSelected ? AppTheme.primaryGreen : Colors.white54,
-            ),
-          ),
+          child: Text(label, textAlign: TextAlign.center, style: TextStyle(fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400, color: isSelected ? AppTheme.primaryGreen : Colors.white54)),
         ),
       ),
     );
@@ -160,34 +100,9 @@ class _PredictionScreenState extends State<PredictionScreen> {
         padding: const EdgeInsets.all(20),
         child: Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(icon, color: color, size: 24),
-            ),
+            Container(padding: const EdgeInsets.all(12), decoration: BoxDecoration(color: color.withOpacity(0.15), borderRadius: BorderRadius.circular(12)), child: Icon(icon, color: color, size: 24)),
             const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(fontSize: 14, color: Colors.white54),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    time,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(title, style: const TextStyle(fontSize: 14, color: Colors.white54)), const SizedBox(height: 4), Text(time, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700))])),
           ],
         ),
       ),
