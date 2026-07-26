@@ -9,20 +9,12 @@ class NotificationService {
   Future<void> initialize() async {
     const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iosSettings = DarwinInitializationSettings();
+    const settings = InitializationSettings(android: androidSettings, iOS: iosSettings);
 
-    const settings = InitializationSettings(
-      android: androidSettings,
-      iOS: iosSettings,
-    );
-
-    await _plugin.initialize(
-      settings,
-      onDidReceiveNotificationResponse: _onNotificationTapped,
-    );
+    await _plugin.initialize(settings, onDidReceiveNotificationResponse: _onNotificationTapped);
   }
 
   Future<void> _onNotificationTapped(NotificationResponse response) async {
-    // Handle notification tap - navigate to relevant screen
     final payload = response.payload;
     if (payload != null) {
       // Navigate based on notification type
@@ -41,13 +33,8 @@ class NotificationService {
       importance: Importance.high,
       priority: Priority.high,
     );
-
     const iosDetails = DarwinNotificationDetails();
-
-    const details = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
-    );
+    const details = NotificationDetails(android: androidDetails, iOS: iosDetails);
 
     await _plugin.show(
       DateTime.now().millisecondsSinceEpoch ~/ 1000,

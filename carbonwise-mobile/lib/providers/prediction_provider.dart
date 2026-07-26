@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import '../core/services/api_service.dart';
+import '../repositories/prediction_repository.dart';
 import '../models/prediction_model.dart';
 
 class PredictionProvider extends ChangeNotifier {
-  final ApiService _apiService;
+  final PredictionRepository _repository;
   Prediction? _prediction6h;
   Prediction? _prediction12h;
   Prediction? _prediction24h;
   bool _isLoading = false;
   String? _error;
 
-  PredictionProvider(this._apiService);
+  PredictionProvider(this._repository);
 
   Prediction? get prediction6h => _prediction6h;
   Prediction? get prediction12h => _prediction12h;
@@ -23,8 +23,7 @@ class PredictionProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _apiService.get('/api/prediction/6h');
-      _prediction6h = Prediction.fromJson(response.data);
+      _prediction6h = await _repository.fetchPrediction6h();
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -39,8 +38,7 @@ class PredictionProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _apiService.get('/api/prediction/12h');
-      _prediction12h = Prediction.fromJson(response.data);
+      _prediction12h = await _repository.fetchPrediction12h();
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -55,8 +53,7 @@ class PredictionProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _apiService.get('/api/prediction/24h');
-      _prediction24h = Prediction.fromJson(response.data);
+      _prediction24h = await _repository.fetchPrediction24h();
       _isLoading = false;
       notifyListeners();
     } catch (e) {

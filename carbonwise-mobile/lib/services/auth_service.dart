@@ -1,9 +1,11 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import '../constants/app_constants.dart';
+import '../core/constants/app_constants.dart';
 import 'api_service.dart';
 
 class AuthService {
-  final ApiService _apiService = ApiService();
+  final ApiService _apiService;
+
+  AuthService(this._apiService);
 
   Future<Map<String, dynamic>> login({
     required String email,
@@ -13,7 +15,6 @@ class AuthService {
       'email': email,
       'password': password,
     });
-
     final data = response.data;
     await _saveTokens(data);
     return data;
@@ -31,9 +32,7 @@ class AuthService {
       'password': password,
       'role': role,
     });
-
-    final data = response.data;
-    return data;
+    return response.data;
   }
 
   Future<bool> verifyOTP({required String email, required String otp}) async {

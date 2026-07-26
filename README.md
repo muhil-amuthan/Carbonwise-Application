@@ -28,12 +28,64 @@
 
 ```
 CarbonWise/
-├── carbonwise-mobile/          # Flutter Mobile Application
-├── carbonwise-backend/         # Spring Boot REST API
-├── carbonwise-ai/              # AI/ML Prediction Server
-├── carbonwise-iot/             # IoT Device Firmware & MQTT
-├── archive/                    # Archived web prototype
-└── README.md
+│
+├── 📱 carbonwise-mobile/
+│   ├── core/
+│   ├── models/
+│   ├── providers/
+│   ├── repositories/
+│   ├── services/
+│   ├── widgets/
+│   ├── screens/
+│   ├── routes/
+│   ├── assets/
+│   └── main.dart
+│
+├── 🖥️ carbonwise-backend/
+│   ├── config/
+│   ├── controller/
+│   ├── service/
+│   ├── repository/
+│   ├── entity/
+│   ├── dto/
+│   ├── mapper/
+│   ├── security/
+│   ├── mqtt/
+│   ├── ai/
+│   ├── scheduler/
+│   ├── notification/
+│   ├── websocket/
+│   ├── validation/
+│   ├── utils/
+│   ├── exception/
+│   └── pom.xml
+│
+├── 🤖 carbonwise-ai/
+│   ├── api/
+│   ├── datasets/
+│   ├── preprocessing/
+│   ├── training/
+│   ├── prediction/
+│   ├── recommendation/
+│   ├── models/
+│   ├── saved_models/
+│   ├── evaluation/
+│   └── utils/
+│
+├── 🔌 carbonwise-iot/
+│   ├── esp32/
+│   ├── gateway/
+│   ├── firmware/
+│   ├── mqtt/
+│   └── documentation/
+│
+├── 📄 README.md
+├── 📄 ARCHITECTURE.md
+├── 📄 API_DOCUMENTATION.md
+├── 📄 DATABASE_SCHEMA.md
+├── 📄 DEPLOYMENT.md
+├── 📄 LICENSE
+└── 📄 .gitignore
 ```
 
 ---
@@ -113,97 +165,6 @@ CarbonWise/
 
 ---
 
-## 🗄️ Database Schema
-
-### Core Tables
-- `Users` – User accounts, roles, preferences
-- `Devices` – Smart appliances linked to users
-- `Schedules` – Device scheduling (manual & AI)
-- `CarbonIntensity` – Live and historical carbon data
-- `Predictions` – AI prediction outputs
-- `Sensors` – IoT sensor registry
-- `SensorData` – Time-series sensor readings
-- `Notifications` – User notification history
-- `Reports` – Generated report metadata
-- `Cities` – City/region configuration
-- `EnergySources` – Grid energy mix data
-- `RenewableData` – Renewable energy tracking
-- `CarbonHistory` – Historical carbon footprints
-- `AIModels` – Model versioning and metadata
-- `Logs` – System audit logs
-
----
-
-## 🔌 REST API Endpoints
-
-### Authentication
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/login` | User login |
-| POST | `/api/auth/register` | User registration |
-| POST | `/api/auth/verifyOTP` | OTP verification |
-| POST | `/api/auth/forgotPassword` | Password reset |
-
-### Consumer
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/consumer/dashboard` | Dashboard data |
-| GET | `/api/consumer/carbon/live` | Live carbon intensity |
-| GET | `/api/consumer/carbon/history` | Carbon history |
-
-### Prediction
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/prediction/6h` | 6-hour forecast |
-| GET | `/api/prediction/12h` | 12-hour forecast |
-| GET | `/api/prediction/24h` | 24-hour forecast |
-
-### Devices
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/device` | Add device |
-| GET | `/api/device` | List devices |
-| PUT | `/api/device/{id}` | Update device |
-| DELETE | `/api/device/{id}` | Delete device |
-
-### Scheduler
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/schedule` | Create schedule |
-| GET | `/api/schedule` | List schedules |
-
-### Sensors
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/sensor/data` | Post sensor data |
-| GET | `/api/sensor/live` | Live sensor readings |
-
-### Reports
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/reports/daily` | Daily report |
-| GET | `/api/reports/weekly` | Weekly report |
-| GET | `/api/reports/monthly` | Monthly report |
-
-### Admin
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/admin/users` | List users |
-| GET | `/api/admin/cities` | List cities |
-| GET | `/api/admin/sensors` | List sensors |
-
----
-
-## 📱 Complete User Flow
-
-```
-User Opens App → Login/Register → Dashboard → Live Carbon Intensity
-→ AI Prediction → Best Time Recommendation → Schedule Appliance
-→ Smart Plug Executes Schedule → Receive Notification → Carbon Savings Report
-```
-
----
-
 ## 🚀 Quick Start
 
 ### Mobile App
@@ -230,14 +191,24 @@ python api/app.py
 ```bash
 cd carbonwise-iot
 # Flash ESP32 via Arduino IDE or PlatformIO
-# Configure Raspberry Pi via scripts
+# Run Raspberry Pi gateway
+python gateway/mqtt_gateway.py
 ```
+
+---
+
+## 📄 Documentation
+
+- [API Documentation](API_DOCUMENTATION.md) – Complete REST API reference
+- [Database Schema](DATABASE_SCHEMA.md) – PostgreSQL table definitions
+- [Deployment Guide](DEPLOYMENT.md) – Production deployment instructions
+- [Architecture](ARCHITECTURE.md) – System architecture overview
 
 ---
 
 ## 📄 License
 
-This project is proprietary and confidential. All rights reserved.
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 

@@ -11,7 +11,7 @@ import '../screens/reports/reports_screen.dart';
 import '../screens/notifications/notifications_screen.dart';
 import '../screens/profile/profile_screen.dart';
 import '../screens/admin/admin_screen.dart';
-import '../core/widgets/main_shell.dart';
+import '../widgets/main_shell.dart';
 
 class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();

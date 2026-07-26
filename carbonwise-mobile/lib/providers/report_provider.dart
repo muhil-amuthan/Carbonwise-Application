@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import '../core/services/api_service.dart';
+import '../repositories/report_repository.dart';
 import '../models/report_model.dart';
 
 class ReportProvider extends ChangeNotifier {
-  final ApiService _apiService;
+  final ReportRepository _repository;
   Report? _dailyReport;
   Report? _weeklyReport;
   Report? _monthlyReport;
   bool _isLoading = false;
   String? _error;
 
-  ReportProvider(this._apiService);
+  ReportProvider(this._repository);
 
   Report? get dailyReport => _dailyReport;
   Report? get weeklyReport => _weeklyReport;
@@ -23,8 +23,7 @@ class ReportProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _apiService.get('/api/reports/daily');
-      _dailyReport = Report.fromJson(response.data);
+      _dailyReport = await _repository.fetchDailyReport();
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -39,8 +38,7 @@ class ReportProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _apiService.get('/api/reports/weekly');
-      _weeklyReport = Report.fromJson(response.data);
+      _weeklyReport = await _repository.fetchWeeklyReport();
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -55,8 +53,7 @@ class ReportProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _apiService.get('/api/reports/monthly');
-      _monthlyReport = Report.fromJson(response.data);
+      _monthlyReport = await _repository.fetchMonthlyReport();
       _isLoading = false;
       notifyListeners();
     } catch (e) {

@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
 
-class SchedulerScreen extends StatefulWidget {
+class SchedulerScreen extends StatelessWidget {
   const SchedulerScreen({super.key});
 
-  @override
-  State<SchedulerScreen> createState() => _SchedulerScreenState();
-}
-
-class _SchedulerScreenState extends State<SchedulerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,16 +13,10 @@ class _SchedulerScreenState extends State<SchedulerScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Clean Window Banner
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppTheme.primaryGreen.withOpacity(0.15),
-                    AppTheme.primaryCyan.withOpacity(0.08),
-                  ],
-                ),
+                gradient: LinearGradient(colors: [AppTheme.primaryGreen.withOpacity(0.15), AppTheme.primaryCyan.withOpacity(0.08)]),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.3)),
               ),
@@ -35,109 +24,42 @@ class _SchedulerScreenState extends State<SchedulerScreen> {
                 children: [
                   Icon(Icons.zap, color: AppTheme.primaryGreen, size: 32),
                   const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Clean Energy Window Active',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: AppTheme.primaryGreen,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Solar generation is peaking. Shift heavy loads now.',
-                          style: TextStyle(fontSize: 13, color: Colors.white70),
-                        ),
-                      ],
-                    ),
-                  ),
+                  Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    const Text('Clean Energy Window Active', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppTheme.primaryGreen)),
+                    const SizedBox(height: 4),
+                    const Text('Solar generation is peaking. Shift heavy loads now.', style: TextStyle(fontSize: 13, color: Colors.white70)),
+                  ])),
                 ],
               ),
             ),
             const SizedBox(height: 24),
-
-            // Schedule Types
-            const Text(
-              'Schedule Options',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
+            const Text('Schedule Options', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
             const SizedBox(height: 12),
-
-            // Manual Schedule
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.edit_calendar, color: AppTheme.primaryCyan),
-                        const SizedBox(width: 12),
-                        const Text(
-                          'Manual Schedule',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Set your own start and end times for device operation.',
-                      style: TextStyle(fontSize: 13, color: Colors.white54),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Create manual schedule
-                      },
-                      child: const Text('Create Manual Schedule'),
-                    ),
-                  ],
-                ),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Row(children: [Icon(Icons.edit_calendar, color: AppTheme.primaryCyan), const SizedBox(width: 12), const Text('Manual Schedule', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))]),
+                  const SizedBox(height: 8),
+                  const Text('Set your own start and end times for device operation.', style: TextStyle(fontSize: 13, color: Colors.white54)),
+                  const SizedBox(height: 16),
+                  ElevatedButton(onPressed: () {}, child: const Text('Create Manual Schedule')),
+                ]),
               ),
             ),
             const SizedBox(height: 12),
-
-            // AI Schedule
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.smart_toy, color: AppTheme.primaryGreen),
-                        const SizedBox(width: 12),
-                        const Text(
-                          'AI-Optimized Schedule',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'AI automatically picks the lowest carbon intensity window for your device.',
-                      style: TextStyle(fontSize: 13, color: Colors.white54),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Estimated savings: 30% carbon reduction',
-                      style: TextStyle(fontSize: 13, color: AppTheme.primaryGreen),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Create AI schedule
-                      },
-                      child: const Text('Create AI Schedule'),
-                    ),
-                  ],
-                ),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Row(children: [Icon(Icons.smart_toy, color: AppTheme.primaryGreen), const SizedBox(width: 12), const Text('AI-Optimized Schedule', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))]),
+                  const SizedBox(height: 8),
+                  const Text('AI automatically picks the lowest carbon intensity window.', style: TextStyle(fontSize: 13, color: Colors.white54)),
+                  const SizedBox(height: 4),
+                  Text('Estimated savings: 30% carbon reduction', style: TextStyle(fontSize: 13, color: AppTheme.primaryGreen)),
+                  const SizedBox(height: 16),
+                  ElevatedButton(onPressed: () {}, child: const Text('Create AI Schedule')),
+                ]),
               ),
             ),
           ],

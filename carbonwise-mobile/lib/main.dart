@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/theme/app_theme.dart';
-import 'core/services/api_service.dart';
-import 'core/services/auth_service.dart';
-import 'core/services/notification_service.dart';
+import 'services/api_service.dart';
+import 'services/auth_service.dart';
+import 'services/notification_service.dart';
+import 'repositories/auth_repository.dart';
+import 'repositories/carbon_repository.dart';
+import 'repositories/device_repository.dart';
+import 'repositories/prediction_repository.dart';
+import 'repositories/sensor_repository.dart';
+import 'repositories/report_repository.dart';
+import 'repositories/notification_repository.dart';
+import 'repositories/map_repository.dart';
 import 'providers/auth_provider.dart';
 import 'providers/carbon_provider.dart';
 import 'providers/device_provider.dart';
@@ -31,21 +39,34 @@ class CarbonWiseApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final apiService = ApiService();
+    final authService = AuthService(apiService);
+
     return MultiProvider(
       providers: [
         // Services
-        Provider<ApiService>(create: (_) => ApiService()),
-        Provider<AuthService>(create: (_) => AuthService()),
+        Provider<ApiService>.value(value: apiService),
+        Provider<AuthService>.value(value: authService),
+
+        // Repositories
+        Provider<AuthRepository>(create: (_) => AuthRepository(authService)),
+        Provider<CarbonRepository>(create: (_) => CarbonRepository(apiService)),
+        Provider<DeviceRepository>(create: (_) => DeviceRepository(apiService)),
+        Provider<PredictionRepository>(create: (_) => PredictionRepository(apiService)),
+        Provider<SensorRepository>(create: (_) => SensorRepository(apiService)),
+        Provider<ReportRepository>(create: (_) => ReportRepository(apiService)),
+        Provider<NotificationRepository>(create: (_) => NotificationRepository(apiService)),
+        Provider<MapRepository>(create: (_) => MapRepository(apiService)),
 
         // Providers
-        ChangeNotifierProvider(create: (ctx) => AuthProvider(ctx.read<AuthService>())),
-        ChangeNotifierProvider(create: (ctx) => CarbonProvider(ctx.read<ApiService>())),
-        ChangeNotifierProvider(create: (ctx) => DeviceProvider(ctx.read<ApiService>())),
-        ChangeNotifierProvider(create: (ctx) => PredictionProvider(ctx.read<ApiService>())),
-        ChangeNotifierProvider(create: (ctx) => SensorProvider(ctx.read<ApiService>())),
-        ChangeNotifierProvider(create: (ctx) => ReportProvider(ctx.read<ApiService>())),
-        ChangeNotifierProvider(create: (ctx) => NotificationProvider(ctx.read<ApiService>())),
-        ChangeNotifierProvider(create: (ctx) => MapProvider(ctx.read<ApiService>())),
+        ChangeNotifierProvider(create: (ctx) => AuthProvider(ctx.read<AuthRepository>())),
+        ChangeNotifierProvider(create: (ctx) => CarbonProvider(ctx.read<CarbonRepository>())),
+        ChangeNotifierProvider(create: (ctx) => DeviceProvider(ctx.read<DeviceRepository>())),
+        ChangeNotifierProvider(create: (ctx) => PredictionProvider(ctx.read<PredictionRepository>())),
+        ChangeNotifierProvider(create: (ctx) => SensorProvider(ctx.read<SensorRepository>())),
+        ChangeNotifierProvider(create: (ctx) => ReportProvider(ctx.read<ReportRepository>())),
+        ChangeNotifierProvider(create: (ctx) => NotificationProvider(ctx.read<NotificationRepository>())),
+        ChangeNotifierProvider(create: (ctx) => MapProvider(ctx.read<MapRepository>())),
       ],
       child: MaterialApp.router(
         title: 'CarbonWise',

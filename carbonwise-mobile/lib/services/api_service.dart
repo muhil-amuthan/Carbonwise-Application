@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../constants/app_constants.dart';
+import '../core/constants/app_constants.dart';
 
 class ApiService {
   late final Dio _dio;
@@ -39,7 +39,6 @@ class ApiService {
     ErrorInterceptorHandler handler,
   ) async {
     if (err.response?.statusCode == 401) {
-      // Token expired - attempt refresh or logout
       final prefs = await SharedPreferences.getInstance();
       final refreshToken = prefs.getString(AppConstants.refreshTokenKey);
       if (refreshToken != null) {
@@ -54,7 +53,6 @@ class ApiService {
           handler.resolve(retryResponse);
           return;
         } catch (_) {
-          // Refresh failed, clear tokens
           await prefs.remove(AppConstants.tokenKey);
           await prefs.remove(AppConstants.refreshTokenKey);
         }

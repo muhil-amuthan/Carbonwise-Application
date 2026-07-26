@@ -32,7 +32,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> _handleRegister() async {
     if (!_formKey.currentState!.validate()) return;
-
     final authProvider = context.read<AuthProvider>();
     final success = await authProvider.register(
       _nameController.text.trim(),
@@ -40,9 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _passwordController.text,
       _selectedRole,
     );
-
     if (success && mounted) {
-      // Show OTP verification dialog
       _showOTPDialog();
     }
   }
@@ -59,15 +56,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const Text('Enter the OTP sent to your email'),
             const SizedBox(height: 16),
             TextField(
-              decoration: const InputDecoration(
-                hintText: 'Enter OTP',
-              ),
+              decoration: const InputDecoration(hintText: 'Enter OTP'),
               onSubmitted: (otp) async {
-                final authProvider = context.read<AuthProvider>();
-                final verified = await authProvider.verifyOTP(
-                  _emailController.text.trim(),
-                  otp,
-                );
+                final verified = await context.read<AuthProvider>().verifyOTP(_emailController.text.trim(), otp);
                 if (verified && mounted) {
                   Navigator.pop(ctx);
                   context.go('/login');
@@ -93,57 +84,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 40),
                 Icon(Icons.eco, size: 64, color: AppTheme.primaryGreen),
                 const SizedBox(height: 16),
-                const Text(
-                  'Create Account',
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
-                ),
+                const Text('Create Account', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
                 const SizedBox(height: 32),
-
-                // Name
                 TextFormField(
                   controller: _nameController,
-                  decoration: const InputDecoration(
-                    hintText: 'Full Name',
-                    prefixIcon: Icon(Icons.person_outlined),
-                  ),
+                  decoration: const InputDecoration(hintText: 'Full Name', prefixIcon: Icon(Icons.person_outlined)),
                   validator: (v) => v?.isEmpty == true ? 'Enter your name' : null,
                 ),
                 const SizedBox(height: 16),
-
-                // Email
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    hintText: 'Email Address',
-                    prefixIcon: Icon(Icons.email_outlined),
-                  ),
+                  decoration: const InputDecoration(hintText: 'Email Address', prefixIcon: Icon(Icons.email_outlined)),
                   validator: (v) => v?.isEmpty == true ? 'Enter your email' : null,
                 ),
                 const SizedBox(height: 16),
-
-                // Role Selector
                 DropdownButtonFormField<String>(
                   value: _selectedRole,
-                  decoration: const InputDecoration(
-                    hintText: 'Select Role',
-                    prefixIcon: Icon(Icons.badge_outlined),
-                  ),
+                  decoration: const InputDecoration(hintText: 'Select Role', prefixIcon: Icon(Icons.badge_outlined)),
                   items: const [
-                    DropdownMenuItem(
-                      value: AppConstants.roleConsumer,
-                      child: Text('Consumer'),
-                    ),
-                    DropdownMenuItem(
-                      value: AppConstants.roleCityAdmin,
-                      child: Text('City Admin'),
-                    ),
+                    DropdownMenuItem(value: AppConstants.roleConsumer, child: Text('Consumer')),
+                    DropdownMenuItem(value: AppConstants.roleCityAdmin, child: Text('City Admin')),
                   ],
                   onChanged: (v) => setState(() => _selectedRole = v!),
                 ),
                 const SizedBox(height: 16),
-
-                // Password
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
@@ -151,32 +116,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     hintText: 'Password',
                     prefixIcon: const Icon(Icons.lock_outlined),
                     suffixIcon: IconButton(
-                      icon: Icon(_obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility),
-                      onPressed: () =>
-                          setState(() => _obscurePassword = !_obscurePassword),
+                      icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
+                      onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                     ),
                   ),
-                  validator: (v) =>
-                      v != null && v.length >= 6 ? null : 'Min 6 characters',
+                  validator: (v) => v != null && v.length >= 6 ? null : 'Min 6 characters',
                 ),
                 const SizedBox(height: 16),
-
-                // Confirm Password
                 TextFormField(
                   controller: _confirmPasswordController,
                   obscureText: _obscurePassword,
-                  decoration: const InputDecoration(
-                    hintText: 'Confirm Password',
-                    prefixIcon: Icon(Icons.lock_outlined),
-                  ),
-                  validator: (v) =>
-                      v == _passwordController.text ? null : 'Passwords don\'t match',
+                  decoration: const InputDecoration(hintText: 'Confirm Password', prefixIcon: Icon(Icons.lock_outlined)),
+                  validator: (v) => v == _passwordController.text ? null : 'Passwords don\'t match',
                 ),
                 const SizedBox(height: 32),
-
-                // Register Button
                 Consumer<AuthProvider>(
                   builder: (context, auth, _) {
                     return SizedBox(
@@ -185,31 +138,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: ElevatedButton(
                         onPressed: auth.isLoading ? null : _handleRegister,
                         child: auth.isLoading
-                            ? const SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: AppTheme.backgroundDark,
-                                ),
-                              )
+                            ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.backgroundDark))
                             : const Text('Register'),
                       ),
                     );
                   },
                 ),
                 const SizedBox(height: 24),
-
-                // Login Link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Already have an account? ',
-                        style: TextStyle(color: Colors.white54)),
-                    TextButton(
-                      onPressed: () => context.go('/login'),
-                      child: const Text('Login'),
-                    ),
+                    const Text('Already have an account? ', style: TextStyle(color: Colors.white54)),
+                    TextButton(onPressed: () => context.go('/login'), child: const Text('Login')),
                   ],
                 ),
               ],
