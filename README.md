@@ -222,4 +222,4 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 
 ---
 
-> Built with 💚 for a greener Tamil Nadu
+> Built with "Muhil" for a greener Tamil Nadu
