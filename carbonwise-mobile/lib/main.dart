@@ -25,10 +25,9 @@ import 'routes/app_router.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase
-  // await Firebase.initializeApp();
-
-  // Initialize notification service
+  // Initialize local notification service.
+  // (Cloud messaging via Firebase can be added later by adding the
+  //  firebase_core / firebase_messaging packages and a google-services.json.)
   await NotificationService.instance.initialize();
 
   runApp(const CarbonWiseApp());
