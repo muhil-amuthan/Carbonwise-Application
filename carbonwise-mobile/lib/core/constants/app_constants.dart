@@ -1,6 +1,9 @@
 class AppConstants {
   // API
-  static const String baseUrl = 'https://api.carbonwise.in';
+  // Change this to your forwarded Codespace port 8080 URL:
+  static const String baseUrl = 'https://glowing-space-couscous-r4xpjgxpqgx4hpjv6-8080.app.github.dev/api';
+  
+  // Keep live/default domain fallbacks for AI and MQTT or update if running locally
   static const String aiServerUrl = 'https://ai.carbonwise.in';
   static const String mqttBroker = 'mqtt.carbonwise.in';
   static const int mqttPort = 1883;
