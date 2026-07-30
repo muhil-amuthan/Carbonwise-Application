@@ -22,7 +22,7 @@ class SchedulerScreen extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.zap, color: AppTheme.primaryGreen, size: 32),
+                  Icon(Icons.bolt, color: AppTheme.primaryGreen, size: 32),
                   const SizedBox(width: 16),
                   Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     const Text('Clean Energy Window Active', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppTheme.primaryGreen)),

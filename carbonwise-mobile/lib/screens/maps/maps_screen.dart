@@ -35,7 +35,7 @@ class _MapsScreenState extends State<MapsScreen> {
               const SizedBox(height: 8),
               _buildMapControl(Icons.air, 'Pollution', AppTheme.primaryRed),
               const SizedBox(height: 8),
-              _buildMapControl(Icons.sensor_detected, 'Sensors', AppTheme.primaryCyan),
+              _buildMapControl(Icons.sensors, 'Sensors', AppTheme.primaryCyan),
               const SizedBox(height: 8),
               _buildMapControl(Icons.warning, 'Risk Zones', Colors.orange),
             ]),

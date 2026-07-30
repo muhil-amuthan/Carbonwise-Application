@@ -22,7 +22,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Notifications'), actions: [IconButton(icon: const Icon(Icons.check_done), onPressed: () {})]),
+      appBar: AppBar(title: const Text('Notifications'), actions: [IconButton(icon: const Icon(Icons.done_all), onPressed: () {})]),
       body: Consumer<NotificationProvider>(
         builder: (context, provider, _) {
           if (provider.isLoading) return const Center(child: CircularProgressIndicator());
@@ -66,7 +66,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   IconData _getNotificationIcon(String type) => switch (type) {
-    AppConstants.notifGridClean => Icons.zap,
+    AppConstants.notifGridClean => Icons.bolt,
     AppConstants.notifGridDirty => Icons.warning,
     AppConstants.notifBestCharging => Icons.ev_station,
     AppConstants.notifDeviceCompleted => Icons.check_circle,
