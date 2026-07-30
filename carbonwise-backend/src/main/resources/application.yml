@@ -1,15 +1,15 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 spring:
   application:
     name: carbonwise-backend
 
   datasource:
-    url: jdbc:h2:mem:carbonwisedb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
-    username: sa
-    password: ""
-    driver-class-name: org.h2.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:carbonwisedb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.h2.Driver}
 
   jpa:
     hibernate:
@@ -17,7 +17,6 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
         format_sql: true
 
   mail:
@@ -33,17 +32,17 @@ spring:
             enable: true
 
 jwt:
-  secret: ${JWT_SECRET:carbonwise-secret-key-change-in-production}
+  secret: ${JWT_SECRET:carbonwise-secret-key-change-in-production-super-long-string}
   expiration: 86400000
   refresh-expiration: 604800000
 
 mqtt:
-  broker: tcp://localhost:1883
+  broker: ${MQTT_BROKER:tcp://localhost:1883}
   client-id: carbonwise-backend
   topic-prefix: carbonwise/
 
 ai:
-  server-url: http://localhost:5000
+  server-url: ${AI_SERVER_URL:http://localhost:5000}
 
 logging:
   level:
