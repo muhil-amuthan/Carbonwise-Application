@@ -42,6 +42,10 @@ carbonwise-backend/.project
 carbonwise-backend/.settings/
 
 # Python / AI
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
 carbonwise-ai/__pycache__/
 carbonwise-ai/*.pyc
 carbonwise-ai/*.pyo
@@ -54,6 +58,7 @@ carbonwise-ai/.pytest_cache/
 carbonwise-ai/models/*.pkl
 carbonwise-ai/models/*.h5
 carbonwise-ai/models/*.joblib
+
 
 # IoT
 carbonwise-iot/esp32/.pio/

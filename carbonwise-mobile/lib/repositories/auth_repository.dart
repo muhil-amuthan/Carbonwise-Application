@@ -34,7 +34,16 @@ class AuthRepository {
     return _authService.getUserRole();
   }
 
+  Future<User?> getCurrentUser() {
+    return _authService.getCurrentUser();
+  }
+
+  Future<String?> getToken() {
+    return _authService.getToken();
+  }
+
   User parseUser(Map<String, dynamic> data) {
     return User.fromJson(data);
   }
 }
+

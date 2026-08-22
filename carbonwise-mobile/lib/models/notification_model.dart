@@ -19,13 +19,16 @@ class CarbonNotification {
 
   factory CarbonNotification.fromJson(Map<String, dynamic> json) {
     return CarbonNotification(
-      id: json['id'],
-      userId: json['userId'],
-      type: json['type'],
-      title: json['title'],
-      message: json['message'],
-      isRead: json['isRead'] ?? false,
-      createdAt: DateTime.parse(json['createdAt']),
+      id: json['id']?.toString() ?? '',
+      userId: json['userId']?.toString() ?? '',
+      type: json['type']?.toString() ?? '',
+      title: json['title']?.toString() ?? '',
+      message: json['message']?.toString() ?? '',
+      isRead: json['isRead'] == true,
+      createdAt: json['createdAt'] != null
+          ? (DateTime.tryParse(json['createdAt'].toString()) ?? DateTime.now())
+          : DateTime.now(),
     );
   }
 }
+

@@ -18,20 +18,27 @@ class User {
     this.city,
     this.profileImage,
     this.isVerified = false,
-    required this.createdAt,
-  });
+    DateTime? createdAt,
+  }) : createdAt = createdAt ?? DateTime.now();
 
   factory User.fromJson(Map<String, dynamic> json) {
+    DateTime parsedCreated;
+    if (json['createdAt'] != null) {
+      parsedCreated = DateTime.tryParse(json['createdAt'].toString()) ?? DateTime.now();
+    } else {
+      parsedCreated = DateTime.now();
+    }
+
     return User(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-      role: json['role'],
-      phone: json['phone'],
-      city: json['city'],
-      profileImage: json['profileImage'],
-      isVerified: json['isVerified'] ?? false,
-      createdAt: DateTime.parse(json['createdAt']),
+      id: json['id']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      email: json['email']?.toString() ?? '',
+      role: json['role']?.toString() ?? 'CONSUMER',
+      phone: json['phone']?.toString(),
+      city: json['city']?.toString(),
+      profileImage: json['profileImage']?.toString(),
+      isVerified: json['isVerified'] == true,
+      createdAt: parsedCreated,
     );
   }
 
@@ -49,3 +56,4 @@ class User {
     };
   }
 }
+

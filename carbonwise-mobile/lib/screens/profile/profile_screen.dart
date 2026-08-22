@@ -15,13 +15,47 @@ class ProfileScreen extends StatelessWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(children: [
-          CircleAvatar(radius: 50, backgroundColor: AppTheme.primaryGreen.withOpacity(0.15), child: Icon(Icons.person, size: 40, color: AppTheme.primaryGreen)),
+          CircleAvatar(
+            radius: 50,
+            backgroundColor: AppTheme.primaryGreen.withOpacity(0.15),
+            child: Icon(Icons.person, size: 40, color: AppTheme.primaryGreen),
+          ),
           const SizedBox(height: 16),
           Text(auth.user?.name ?? 'User', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
           const SizedBox(height: 4),
           Text(auth.user?.email ?? '', style: const TextStyle(fontSize: 14, color: Colors.white54)),
           const SizedBox(height: 8),
-          Container(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6), decoration: BoxDecoration(color: AppTheme.primaryCyan.withOpacity(0.15), borderRadius: BorderRadius.circular(20)), child: Text(auth.user?.role ?? 'Consumer', style: TextStyle(color: AppTheme.primaryCyan, fontWeight: FontWeight.w600))),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryCyan.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  auth.user?.role ?? 'Consumer',
+                  style: const TextStyle(color: AppTheme.primaryCyan, fontWeight: FontWeight.w600),
+                ),
+              ),
+              if (auth.isGuestMode) ...[
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryYellow.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: AppTheme.primaryYellow.withOpacity(0.5)),
+                  ),
+                  child: const Text(
+                    'Guest Mode',
+                    style: TextStyle(color: AppTheme.primaryYellow, fontWeight: FontWeight.bold, fontSize: 12),
+                  ),
+                ),
+              ],
+            ],
+          ),
           const SizedBox(height: 32),
           Row(children: [
             _buildStatCard('Carbon Saved', '86.1 kg', AppTheme.primaryGreen),
@@ -37,18 +71,41 @@ class ProfileScreen extends StatelessWidget {
           _buildMenuTile(Icons.help_outline, 'Help & Support'),
           _buildMenuTile(Icons.info_outline, 'About CarbonWise'),
           const SizedBox(height: 16),
-          SizedBox(width: double.infinity, height: 52, child: OutlinedButton(
-            onPressed: () async { await context.read<AuthProvider>().logout(); context.go('/login'); },
-            style: OutlinedButton.styleFrom(foregroundColor: AppTheme.primaryRed, side: const BorderSide(color: AppTheme.primaryRed)),
-            child: const Text('Logout'),
-          )),
+          SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: OutlinedButton(
+              onPressed: () async {
+                await context.read<AuthProvider>().logout();
+                if (context.mounted) {
+                  context.go('/login');
+                }
+              },
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppTheme.primaryRed,
+                side: const BorderSide(color: AppTheme.primaryRed),
+              ),
+              child: Text(auth.isGuestMode ? 'Exit Guest Mode' : 'Logout'),
+            ),
+          ),
         ]),
       ),
     );
   }
 
   Widget _buildStatCard(String label, String value, Color color) => Expanded(
-    child: Card(child: Padding(padding: const EdgeInsets.all(16), child: Column(children: [Text(value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: color)), const SizedBox(height: 4), Text(label, style: const TextStyle(fontSize: 12, color: Colors.white54))]))),
+    child: Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text(value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: color)),
+            const SizedBox(height: 4),
+            Text(label, style: const TextStyle(fontSize: 12, color: Colors.white54)),
+          ],
+        ),
+      ),
+    ),
   );
 
   Widget _buildMenuTile(IconData icon, String label) => ListTile(
@@ -59,3 +116,4 @@ class ProfileScreen extends StatelessWidget {
     onTap: () {},
   );
 }
+

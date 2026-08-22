@@ -47,4 +47,19 @@ public class User {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
-}
+
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+        if (isVerified == null) {
+            isVerified = false;
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+}

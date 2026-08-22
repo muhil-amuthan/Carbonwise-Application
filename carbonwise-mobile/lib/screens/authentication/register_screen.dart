@@ -13,13 +13,24 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  late final TextEditingController _nameController;
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+  late final TextEditingController _confirmPasswordController;
   final _formKey = GlobalKey<FormState>();
   String _selectedRole = AppConstants.roleConsumer;
   bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Default editable fields as requested
+    _nameController = TextEditingController(text: 'Muhil');
+    _emailController = TextEditingController(text: 'user@carbonwise.com');
+    _passwordController = TextEditingController(text: 'user123');
+    _confirmPasswordController = TextEditingController(text: 'user123');
+  }
 
   @override
   void dispose() {
@@ -34,15 +45,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _showSnackBar(String message, {bool isError = false}) {
     if (!mounted) return;
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
+      content: Text(
+        message,
+        style: const TextStyle(fontWeight: FontWeight.w500),
+      ),
       backgroundColor: isError ? AppTheme.primaryRed : AppTheme.primaryGreen,
       behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 4),
     ));
   }
 
   Future<void> _handleRegister() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    FocusScope.of(context).unfocus();
+
     final authProvider = context.read<AuthProvider>();
     final success = await authProvider.register(
       _nameController.text.trim(),
@@ -54,136 +73,165 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (!mounted) return;
 
     if (success) {
-      if (authProvider.isOfflineMode) {
-        _showSnackBar('Backend unreachable — account created in offline mode. Please log in.');
-        context.go('/login');
-      } else {
-        _showOTPDialog();
-      }
+      _showSnackBar('Registration successful! Please login with your credentials.');
+      // Navigate to login screen so user can authenticate with the newly created account
+      context.go('/login');
     } else {
-      _showSnackBar(authProvider.error ?? 'Registration failed', isError: true);
+      final errorMsg = authProvider.error ?? 'Registration failed. Please try again.';
+      _showSnackBar(errorMsg, isError: true);
     }
-  }
-
-  void _showOTPDialog() {
-    final otpController = TextEditingController();
-
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Verify Email'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('Enter the OTP sent to your email'),
-            const SizedBox(height: 16),
-            TextField(
-              controller: otpController,
-              keyboardType: TextInputType.number,
-              autofocus: true,
-              decoration: const InputDecoration(hintText: 'Enter OTP'),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text('Cancel')),
-          ElevatedButton(
-            child: const Text('Verify'),
-            onPressed: () async {
-              final otp = otpController.text.trim();
-              if (otp.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('Please enter the OTP'), backgroundColor: AppTheme.primaryRed));
-                return;
-              }
-              final verified = await context.read<AuthProvider>().verifyOTP(_emailController.text.trim(), otp);
-              if (!mounted) return;
-
-              if (verified) {
-                Navigator.of(ctx).pop();
-                _showSnackBar('Email verified! Please log in.');
-                context.go('/login');
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(context.read<AuthProvider>().error ?? 'Invalid OTP, please try again'),
-                    backgroundColor: AppTheme.primaryRed));
-              }
-            },
-          ),
-        ],
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.backgroundDark,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: Form(
             key: _formKey,
             child: Column(
               children: [
-                const SizedBox(height: 40),
-                Icon(Icons.eco, size: 64, color: AppTheme.primaryGreen),
+                const SizedBox(height: 24),
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryGreen.withOpacity(0.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.person_add_alt_1_rounded, size: 48, color: AppTheme.primaryGreen),
+                ),
                 const SizedBox(height: 16),
-                const Text('Create Account', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
-                const SizedBox(height: 32),
+                const Text(
+                  'Create Account',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.5,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Join CarbonWise real-time grid intelligence',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white.withOpacity(0.6),
+                  ),
+                ),
+                const SizedBox(height: 28),
+
+                // Name Input
                 TextFormField(
                   controller: _nameController,
                   textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(hintText: 'Full Name', prefixIcon: Icon(Icons.person_outlined)),
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
+                    labelText: 'Full Name',
+                    hintText: 'e.g. Muhil',
+                    prefixIcon: Icon(Icons.person_outlined),
+                  ),
                   validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter your name' : null,
                 ),
                 const SizedBox(height: 16),
+
+                // Email Input
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(hintText: 'Email Address', prefixIcon: Icon(Icons.email_outlined)),
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
+                    labelText: 'Email Address',
+                    hintText: 'e.g. user@carbonwise.com',
+                    prefixIcon: Icon(Icons.email_outlined),
+                  ),
                   validator: (v) => (v == null || v.trim().isEmpty)
                       ? 'Enter your email'
                       : (!_isValidEmail(v.trim()) ? 'Enter a valid email address' : null),
                 ),
                 const SizedBox(height: 16),
+
+                // Role Dropdown
                 DropdownButtonFormField<String>(
                   value: _selectedRole,
-                  decoration: const InputDecoration(hintText: 'Select Role', prefixIcon: Icon(Icons.badge_outlined)),
+                  dropdownColor: AppTheme.cardDark,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
+                    labelText: 'Select Role',
+                    prefixIcon: Icon(Icons.badge_outlined),
+                  ),
                   items: const [
-                    DropdownMenuItem(value: AppConstants.roleConsumer, child: Text('Consumer')),
-                    DropdownMenuItem(value: AppConstants.roleCityAdmin, child: Text('City Admin')),
+                    DropdownMenuItem(
+                      value: AppConstants.roleConsumer,
+                      child: Text('Consumer', style: TextStyle(color: Colors.white)),
+                    ),
+                    DropdownMenuItem(
+                      value: AppConstants.roleCityAdmin,
+                      child: Text('City Admin', style: TextStyle(color: Colors.white)),
+                    ),
+                    DropdownMenuItem(
+                      value: AppConstants.roleSystemAdmin,
+                      child: Text('System Admin', style: TextStyle(color: Colors.white)),
+                    ),
                   ],
-                  onChanged: (v) => setState(() => _selectedRole = v!),
+                  onChanged: (v) {
+                    if (v != null) {
+                      setState(() => _selectedRole = v);
+                    }
+                  },
                 ),
                 const SizedBox(height: 16),
+
+                // Password Input
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   textInputAction: TextInputAction.next,
+                  style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
-                    hintText: 'Password',
+                    labelText: 'Password',
+                    hintText: 'Min 6 characters',
                     prefixIcon: const Icon(Icons.lock_outlined),
                     suffixIcon: IconButton(
-                      icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
+                      icon: Icon(
+                        _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                        color: Colors.white54,
+                      ),
                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                     ),
                   ),
                   validator: (v) => (v != null && v.length >= 6) ? null : 'Min 6 characters',
                 ),
                 const SizedBox(height: 16),
+
+                // Confirm Password Input
                 TextFormField(
                   controller: _confirmPasswordController,
-                  obscureText: _obscurePassword,
+                  obscureText: _obscureConfirmPassword,
                   textInputAction: TextInputAction.done,
                   onFieldSubmitted: (_) => _handleRegister(),
-                  decoration: const InputDecoration(hintText: 'Confirm Password', prefixIcon: Icon(Icons.lock_outlined)),
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    labelText: 'Confirm Password',
+                    hintText: 'Re-enter your password',
+                    prefixIcon: const Icon(Icons.lock_reset_outlined),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                        color: Colors.white54,
+                      ),
+                      onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                    ),
+                  ),
                   validator: (v) => (v != null && v.isNotEmpty && v == _passwordController.text)
                       ? null
-                      : 'Passwords don\'t match',
+                      : 'Passwords do not match',
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 28),
+
+                // Register Submit Button
                 Consumer<AuthProvider>(
                   builder: (context, auth, _) => SizedBox(
                     width: double.infinity,
@@ -191,19 +239,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: ElevatedButton(
                       onPressed: auth.isLoading ? null : _handleRegister,
                       child: auth.isLoading
-                          ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.backgroundDark))
-                          : const Text('Register'),
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                color: AppTheme.backgroundDark,
+                              ),
+                            )
+                          : const Text(
+                              'Register Account',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 24),
+
+                // Already have account
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Already have an account? ', style: TextStyle(color: Colors.white54)),
-                    TextButton(onPressed: () => context.go('/login'), child: const Text('Login')),
+                    const Text('Already have an account? ', style: TextStyle(color: Colors.white60)),
+                    GestureDetector(
+                      onTap: () => context.go('/login'),
+                      child: const Text(
+                        'Sign In',
+                        style: TextStyle(
+                          color: AppTheme.primaryGreen,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
+                const SizedBox(height: 24),
               ],
             ),
           ),
@@ -212,3 +285,4 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 }
+

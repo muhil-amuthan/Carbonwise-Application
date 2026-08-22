@@ -29,22 +29,28 @@ class Report {
 
   factory Report.fromJson(Map<String, dynamic> json) {
     return Report(
-      id: json['id'],
-      userId: json['userId'],
-      type: json['type'],
-      startDate: DateTime.parse(json['startDate']),
-      endDate: DateTime.parse(json['endDate']),
-      totalCarbonUsed: (json['totalCarbonUsed'] as num).toDouble(),
-      totalCarbonSaved: (json['totalCarbonSaved'] as num).toDouble(),
-      totalElectricityUsed: (json['totalElectricityUsed'] as num).toDouble(),
-      renewablePercentage: (json['renewablePercentage'] as num).toDouble(),
-      deviceCount: json['deviceCount'] ?? 0,
+      id: json['id']?.toString() ?? '',
+      userId: json['userId']?.toString() ?? '',
+      type: json['type']?.toString() ?? 'DAILY',
+      startDate: json['startDate'] != null
+          ? (DateTime.tryParse(json['startDate'].toString()) ?? DateTime.now())
+          : DateTime.now(),
+      endDate: json['endDate'] != null
+          ? (DateTime.tryParse(json['endDate'].toString()) ?? DateTime.now())
+          : DateTime.now(),
+      totalCarbonUsed: (json['totalCarbonUsed'] as num?)?.toDouble() ?? 0.0,
+      totalCarbonSaved: (json['totalCarbonSaved'] as num?)?.toDouble() ?? 0.0,
+      totalElectricityUsed: (json['totalElectricityUsed'] as num?)?.toDouble() ?? 0.0,
+      renewablePercentage: (json['renewablePercentage'] as num?)?.toDouble() ?? 0.0,
+      deviceCount: (json['deviceCount'] as num?)?.toInt() ?? 0,
       deviceStatistics: (json['deviceStatistics'] as List?)
               ?.map((e) => DeviceStatistic.fromJson(e))
-              .toList() ?? [],
-      pdfUrl: json['pdfUrl'],
+              .toList() ??
+          [],
+      pdfUrl: json['pdfUrl']?.toString(),
     );
   }
+
 }
 
 class DeviceStatistic {

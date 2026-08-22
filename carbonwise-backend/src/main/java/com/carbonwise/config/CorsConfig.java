@@ -16,20 +16,24 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of(
-            "http://localhost:3000",
+        config.setAllowedOriginPatterns(List.of(
+            "http://localhost:*",
+            "http://127.0.0.1:*",
+            "https://*.app.github.dev",
+            "https://*.onrender.com",
             "https://carbonwise.in",
-            "https://app.carbonwise.in"
+            "https://*.carbonwise.in"
         ));
 
         config.setAllowedMethods(Arrays.asList(
-            "GET", "POST", "PUT", "DELETE", "OPTIONS"
+            "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
         ));
 
         config.setAllowedHeaders(Arrays.asList(
-            "Authorization", "Content-Type", "X-Requested-With"
+            "Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin"
         ));
 
+        config.setExposedHeaders(List.of("Authorization"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
 

@@ -6,19 +6,22 @@ spring:
     name: carbonwise-backend
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:carbonwisedb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL}
-    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/carbonwise}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:}
-    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.h2.Driver}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.postgresql.Driver}
 
   jpa:
-    database-platform: ${SPRING_JPA_DATABASE_PLATFORM:org.hibernate.dialect.H2Dialect}
+    database-platform: ${SPRING_JPA_DATABASE_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
+        jdbc:
+          lob:
+            non_contextual_creation: true
 
   mail:
     host: smtp.gmail.com
@@ -33,7 +36,7 @@ spring:
             enable: true
 
 jwt:
-  secret: ${JWT_SECRET:carbonwise-secret-key-change-in-production-super-long-string}
+  secret: ${JWT_SECRET:carbonwise-secret-key-change-in-production-super-long-string-min-256-bits}
   expiration: 86400000
   refresh-expiration: 604800000
 
@@ -47,5 +50,7 @@ ai:
 
 logging:
   level:
-    com.carbonwise: DEBUG
-    org.springframework.security: DEBUG
+    com.carbonwise: INFO
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN
+
