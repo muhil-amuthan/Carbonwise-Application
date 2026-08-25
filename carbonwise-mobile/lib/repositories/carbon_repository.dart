@@ -14,7 +14,6 @@ class CarbonRepository {
       }
     } catch (_) {}
     return CarbonIntensity(
-      id: 'live-fallback',
       intensity: 118.0,
       timestamp: DateTime.now(),
       solarWindPercent: 64.0,
@@ -40,7 +39,6 @@ class CarbonRepository {
       final dt = now.subtract(Duration(days: 6 - i));
       final val = [145.0, 132.0, 110.0, 168.0, 125.0, 118.0, 105.0][i % 7];
       return CarbonIntensity(
-        id: 'hist-$i',
         intensity: val,
         timestamp: dt,
         solarWindPercent: 60.0 + (i * 2),

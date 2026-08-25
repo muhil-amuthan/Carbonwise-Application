@@ -32,6 +32,12 @@ class ReportRepository {
       totalElectricityUsed: 18.5,
       renewablePercentage: 68.0,
       deviceCount: 4,
+      deviceStatistics: [
+        DeviceStatistic(deviceName: 'EV Home Charger', deviceType: AppConstants.deviceEVCharger, carbonUsed: 5.2, carbonSaved: 2.1, electricityUsed: 8.0),
+        DeviceStatistic(deviceName: 'Living Room AC', deviceType: AppConstants.deviceAirConditioner, carbonUsed: 3.8, carbonSaved: 1.0, electricityUsed: 5.5),
+        DeviceStatistic(deviceName: 'Smart Washing Machine', deviceType: AppConstants.deviceWashingMachine, carbonUsed: 1.8, carbonSaved: 0.8, electricityUsed: 2.5),
+        DeviceStatistic(deviceName: 'Eco Water Heater', deviceType: AppConstants.deviceWaterHeater, carbonUsed: 1.6, carbonSaved: 0.3, electricityUsed: 2.5),
+      ],
       pdfUrl: null,
     );
   }
@@ -55,6 +61,12 @@ class ReportRepository {
       totalElectricityUsed: 122.0,
       renewablePercentage: 62.5,
       deviceCount: 4,
+      deviceStatistics: [
+        DeviceStatistic(deviceName: 'EV Home Charger', deviceType: AppConstants.deviceEVCharger, carbonUsed: 35.0, carbonSaved: 12.0, electricityUsed: 52.0),
+        DeviceStatistic(deviceName: 'Living Room AC', deviceType: AppConstants.deviceAirConditioner, carbonUsed: 24.0, carbonSaved: 6.5, electricityUsed: 36.0),
+        DeviceStatistic(deviceName: 'Smart Washing Machine', deviceType: AppConstants.deviceWashingMachine, carbonUsed: 14.0, carbonSaved: 7.0, electricityUsed: 18.0),
+        DeviceStatistic(deviceName: 'Eco Water Heater', deviceType: AppConstants.deviceWaterHeater, carbonUsed: 11.6, carbonSaved: 3.0, electricityUsed: 16.0),
+      ],
       pdfUrl: null,
     );
   }
@@ -78,6 +90,12 @@ class ReportRepository {
       totalElectricityUsed: 350.0,
       renewablePercentage: 57.0,
       deviceCount: 4,
+      deviceStatistics: [
+        DeviceStatistic(deviceName: 'EV Home Charger', deviceType: AppConstants.deviceEVCharger, carbonUsed: 120.0, carbonSaved: 36.0, electricityUsed: 150.0),
+        DeviceStatistic(deviceName: 'Living Room AC', deviceType: AppConstants.deviceAirConditioner, carbonUsed: 85.0, carbonSaved: 15.0, electricityUsed: 105.0),
+        DeviceStatistic(deviceName: 'Smart Washing Machine', deviceType: AppConstants.deviceWashingMachine, carbonUsed: 45.0, carbonSaved: 25.0, electricityUsed: 52.0),
+        DeviceStatistic(deviceName: 'Eco Water Heater', deviceType: AppConstants.deviceWaterHeater, carbonUsed: 37.0, carbonSaved: 10.0, electricityUsed: 43.0),
+      ],
       pdfUrl: null,
     );
   }

@@ -14,7 +14,6 @@ class DeviceRepository {
       powerRating: 7.4,
       isActive: true,
       isScheduled: true,
-      currentPower: 7.2,
       createdAt: DateTime.now(),
     ),
     Device(
@@ -25,7 +24,6 @@ class DeviceRepository {
       powerRating: 1.8,
       isActive: true,
       isScheduled: false,
-      currentPower: 1.5,
       createdAt: DateTime.now(),
     ),
     Device(
@@ -36,7 +34,6 @@ class DeviceRepository {
       powerRating: 1.2,
       isActive: false,
       isScheduled: true,
-      currentPower: 0.0,
       createdAt: DateTime.now(),
     ),
     Device(
@@ -47,7 +44,6 @@ class DeviceRepository {
       powerRating: 2.5,
       isActive: false,
       isScheduled: false,
-      currentPower: 0.0,
       createdAt: DateTime.now(),
     ),
   ];
@@ -91,7 +87,6 @@ class DeviceRepository {
         powerRating: (deviceData['powerRating'] as num?)?.toDouble() ?? 1.0,
         isActive: deviceData['isActive'] == true,
         isScheduled: false,
-        currentPower: 0.0,
         createdAt: DateTime.now(),
       );
       _localDevices.add(newDevice);
@@ -118,7 +113,6 @@ class DeviceRepository {
           powerRating: (deviceData['powerRating'] as num?)?.toDouble() ?? existing.powerRating,
           isActive: deviceData['isActive'] != null ? deviceData['isActive'] == true : existing.isActive,
           isScheduled: existing.isScheduled,
-          currentPower: existing.currentPower,
           createdAt: existing.createdAt,
         );
         _localDevices[idx] = updated;
