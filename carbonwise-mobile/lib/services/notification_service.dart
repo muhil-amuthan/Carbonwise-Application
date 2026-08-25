@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService {
@@ -5,19 +6,33 @@ class NotificationService {
   NotificationService._();
 
   final FlutterLocalNotificationsPlugin _plugin = FlutterLocalNotificationsPlugin();
+  bool _isInitialized = false;
 
   Future<void> initialize() async {
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iosSettings = DarwinInitializationSettings();
-    const settings = InitializationSettings(android: androidSettings, iOS: iosSettings);
+    if (_isInitialized) return;
+    try {
+      const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const iosSettings = DarwinInitializationSettings(
+        requestAlertPermission: false,
+        requestBadgePermission: false,
+        requestSoundPermission: false,
+      );
+      const settings = InitializationSettings(android: androidSettings, iOS: iosSettings);
 
-    await _plugin.initialize(settings, onDidReceiveNotificationResponse: _onNotificationTapped);
+      await _plugin.initialize(
+        settings,
+        onDidReceiveNotificationResponse: _onNotificationTapped,
+      );
+      _isInitialized = true;
+    } catch (e) {
+      debugPrint('NotificationService init error: $e');
+    }
   }
 
   Future<void> _onNotificationTapped(NotificationResponse response) async {
     final payload = response.payload;
     if (payload != null) {
-      // Navigate based on notification type
+      debugPrint('Notification tapped with payload: $payload');
     }
   }
 
@@ -26,22 +41,29 @@ class NotificationService {
     required String body,
     String? payload,
   }) async {
-    const androidDetails = AndroidNotificationDetails(
-      'carbonwise_channel',
-      'CarbonWise Notifications',
-      channelDescription: 'Carbon alerts, predictions, and device updates',
-      importance: Importance.high,
-      priority: Priority.high,
-    );
-    const iosDetails = DarwinNotificationDetails();
-    const details = NotificationDetails(android: androidDetails, iOS: iosDetails);
+    if (!_isInitialized) {
+      await initialize();
+    }
+    try {
+      const androidDetails = AndroidNotificationDetails(
+        'carbonwise_channel',
+        'CarbonWise Notifications',
+        channelDescription: 'Carbon alerts, predictions, and device updates',
+        importance: Importance.high,
+        priority: Priority.high,
+      );
+      const iosDetails = DarwinNotificationDetails();
+      const details = NotificationDetails(android: androidDetails, iOS: iosDetails);
 
-    await _plugin.show(
-      DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      title,
-      body,
-      details,
-      payload: payload,
-    );
+      await _plugin.show(
+        DateTime.now().millisecondsSinceEpoch ~/ 1000,
+        title,
+        body,
+        details,
+        payload: payload,
+      );
+    } catch (e) {
+      debugPrint('Error showing notification: $e');
+    }
   }
 }

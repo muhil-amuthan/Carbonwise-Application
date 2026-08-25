@@ -48,18 +48,18 @@ class ReportProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchMonthlyReport() async {
+  Future<void> fetchAllReports() async {
     _isLoading = true;
+    _error = null;
     notifyListeners();
-
     try {
-      _monthlyReport = await _repository.fetchMonthlyReport();
-      _isLoading = false;
-      notifyListeners();
-    } catch (e) {
-      _error = e.toString();
-      _isLoading = false;
-      notifyListeners();
-    }
+      await Future.wait([
+        fetchDailyReport(),
+        fetchWeeklyReport(),
+        fetchMonthlyReport(),
+      ]);
+    } catch (_) {}
+    _isLoading = false;
+    notifyListeners();
   }
 }

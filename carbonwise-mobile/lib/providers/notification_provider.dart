@@ -47,11 +47,20 @@ class NotificationProvider extends ChangeNotifier {
           createdAt: _notifications[index].createdAt,
         );
         _unreadCount = _notifications.where((n) => !n.isRead).length;
-        notifyListeners();
-      }
-    } catch (e) {
-      _error = e.toString();
+  Future<void> markAllAsRead() async {
+    try {
+      await _repository.markAllAsRead();
+      _notifications = _notifications.map((n) => CarbonNotification(
+        id: n.id,
+        userId: n.userId,
+        type: n.type,
+        title: n.title,
+        message: n.message,
+        isRead: true,
+        createdAt: n.createdAt,
+      )).toList();
+      _unreadCount = 0;
       notifyListeners();
-    }
+    } catch (_) {}
   }
 }

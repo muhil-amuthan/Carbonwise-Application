@@ -42,12 +42,26 @@ class MapProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchHighRiskZones() async {
+  Future<void> fetchAllMapData() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
     try {
-      _highRiskZones = await _repository.fetchHighRiskZones();
+      final results = await Future.wait([
+        _repository.fetchCarbonHeatmap(),
+        _repository.fetchSensorLocations(),
+        _repository.fetchHighRiskZones(),
+      ]);
+
+      _heatmapData = results[0];
+      _sensorLocations = results[1];
+      _highRiskZones = results[2];
+      _isLoading = false;
       notifyListeners();
     } catch (e) {
       _error = e.toString();
+      _isLoading = false;
       notifyListeners();
     }
   }

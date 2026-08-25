@@ -25,10 +25,16 @@ import 'routes/app_router.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize local notification service.
-  // (Cloud messaging via Firebase can be added later by adding the
-  //  firebase_core / firebase_messaging packages and a google-services.json.)
-  await NotificationService.instance.initialize();
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+  };
+
+  // Initialize local notification service safely without throwing on unsupported platforms
+  try {
+    await NotificationService.instance.initialize();
+  } catch (e) {
+    debugPrint('NotificationService initialization skipped/failed: $e');
+  }
 
   runApp(const CarbonWiseApp());
 }

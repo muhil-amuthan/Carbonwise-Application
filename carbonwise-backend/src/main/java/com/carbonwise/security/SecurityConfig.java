@@ -42,7 +42,11 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/error", "/favicon.ico").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/sensor/data").permitAll()
+                .requestMatchers("/api/sensor/**").permitAll()
+                .requestMatchers("/api/gis/**").permitAll()
+                .requestMatchers("/api/notifications/**").permitAll()
+                .requestMatchers("/api/prediction/**").permitAll()
+                .requestMatchers("/api/consumer/carbon/**").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("SYSTEM_ADMIN")
                 .anyRequest().authenticated()
             )
