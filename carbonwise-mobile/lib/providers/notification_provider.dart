@@ -47,6 +47,14 @@ class NotificationProvider extends ChangeNotifier {
           createdAt: _notifications[index].createdAt,
         );
         _unreadCount = _notifications.where((n) => !n.isRead).length;
+        notifyListeners();
+      }
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+    }
+  }
+
   Future<void> markAllAsRead() async {
     try {
       await _repository.markAllAsRead();
