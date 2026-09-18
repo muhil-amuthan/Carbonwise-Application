@@ -170,6 +170,24 @@ class _MapsScreenState extends State<MapsScreen> {
             zoomControlsEnabled: false,
           ),
 
+          // Demo-data banner (map tiles need a production API key)
+          Positioned(
+            top: 16,
+            left: 16,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.75),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppTheme.primaryYellow.withOpacity(0.5)),
+              ),
+              child: const Text(
+                'DEMO GIS DATA',
+                style: TextStyle(color: AppTheme.primaryYellow, fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6),
+              ),
+            ),
+          ),
+
           // Layer Control Buttons
           Positioned(
             top: 16,

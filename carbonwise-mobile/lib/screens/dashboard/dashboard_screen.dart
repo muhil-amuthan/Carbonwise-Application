@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_theme.dart';
+import '../../providers/auth_provider.dart';
 import '../../providers/carbon_provider.dart';
 import '../../widgets/carbon_gauge.dart';
 
@@ -135,6 +136,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ],
       ),
       actions: [
+        if (context.watch<AuthProvider>().isGuestMode)
+          Center(
+            child: Container(
+              margin: const EdgeInsets.only(right: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppTheme.primaryYellow.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppTheme.primaryYellow.withOpacity(0.4)),
+              ),
+              child: const Text('DEMO MODE', style: TextStyle(color: AppTheme.primaryYellow, fontSize: 9.5, fontWeight: FontWeight.w800, letterSpacing: 0.6)),
+            ),
+          ),
         IconButton(
           icon: Stack(
             children: [

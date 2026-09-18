@@ -29,9 +29,11 @@ class ApiService {
     final effectiveBase = _normalizeBaseUrl(customBaseUrl ?? AppConstants.baseUrl);
     _dio = Dio(BaseOptions(
       baseUrl: effectiveBase,
-      connectTimeout: const Duration(seconds: 45),
-      receiveTimeout: const Duration(seconds: 45),
-      sendTimeout: const Duration(seconds: 45),
+      // Short timeouts: demo must never hang on a slow/cold backend.
+      // Repositories fall back to deterministic demo data on failure.
+      connectTimeout: const Duration(seconds: 5),
+      receiveTimeout: const Duration(seconds: 5),
+      sendTimeout: const Duration(seconds: 5),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
