@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_theme.dart';
+import '../../providers/auth_provider.dart';
 import '../../providers/prediction_provider.dart';
 
 class PredictionScreen extends StatefulWidget {
@@ -49,6 +50,29 @@ class _PredictionScreenState extends State<PredictionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHorizonSelector(),
+            if (context.read<AuthProvider>().isGuestMode) ...[
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryYellow.withOpacity(0.10),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppTheme.primaryYellow.withOpacity(0.35)),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.info_outline, size: 14, color: AppTheme.primaryYellow),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'DEMO FORECAST DATA — deterministic sample curve',
+                        style: TextStyle(color: AppTheme.primaryYellow, fontSize: 10.5, fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             const SizedBox(height: 16),
             _buildMetricsOverview(),
             const SizedBox(height: 20),

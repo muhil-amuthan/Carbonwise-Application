@@ -9,10 +9,11 @@ class Device {
   final String? scheduleId;
   final DateTime createdAt;
   final String? customLocation;
+  final bool isConnecting;
 
   double get power => powerRating;
-  bool get isOn => isActive;
-  String get status => isActive ? 'ONLINE' : 'OFFLINE';
+  bool get isOn => isActive && !isConnecting;
+  String get status => isConnecting ? 'CONNECTING' : (isActive ? 'ONLINE' : 'OFFLINE');
   String get location => customLocation ?? 'Sector 3 • Bay A';
 
   Device({
@@ -25,6 +26,7 @@ class Device {
     this.isScheduled = false,
     this.scheduleId,
     this.customLocation,
+    this.isConnecting = false,
     required this.createdAt,
   });
 

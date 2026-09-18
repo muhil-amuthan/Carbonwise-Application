@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_theme.dart';
+import '../../providers/auth_provider.dart';
 import '../../providers/device_provider.dart';
 import '../../models/device_model.dart';
 
@@ -57,8 +58,31 @@ class _AppliancesScreenState extends State<AppliancesScreen> {
                   ? devices.where((d) => d.status.toUpperCase() == 'ONLINE').toList()
                   : devices.where((d) => d.status.toUpperCase() == 'OFFLINE').toList();
 
+          final isGuest = context.read<AuthProvider>().isGuestMode;
           return Column(
             children: [
+              if (isGuest)
+                Container(
+                  margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryYellow.withOpacity(0.10),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppTheme.primaryYellow.withOpacity(0.35)),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.info_outline, size: 14, color: AppTheme.primaryYellow),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'DEMO DEVICES — hardware simulated, no live telemetry',
+                          style: TextStyle(color: AppTheme.primaryYellow, fontSize: 10.5, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               _buildFilterChips(),
               Expanded(
                 child: filtered.isEmpty
@@ -180,7 +204,7 @@ class _AppliancesScreenState extends State<AppliancesScreen> {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        dev.status.toUpperCase(),
+                        dev.status.toUpperCase() + (isOnline && context.read<AuthProvider>().isGuestMode ? ' • DEMO' : ''),
                         style: TextStyle(
                           color: isConnecting ? AppTheme.primaryYellow : isOnline ? AppTheme.primaryGreen : Colors.redAccent,
                           fontSize: 9.5,
