@@ -4,6 +4,42 @@
 
 ---
 
+## 📱 Android APK
+
+**CarbonWise Android APK — install it on your phone and run the demo.**
+
+### ⬇️ Download
+
+- **Option A (recommended):** open the repo's [**Releases**](https://github.com/muhil-amuthan/Carbonwise-Application/releases) page and download **`CarbonWise.apk`** from the latest `carbonwise-demo-v1` release.
+- **Option B:** open [**Actions → Build Android APK**](https://github.com/muhil-amuthan/Carbonwise-Application/actions/workflows/build_apk.yml) → tap the latest successful run → download the **CarbonWise-App-Release** artifact (ZIP contains `app-release.apk`, rename to `CarbonWise.apk`).
+
+### 📲 Install on Android
+
+1. Copy `CarbonWise.apk` to your phone (or download it directly on the phone).
+2. Tap the file → allow **“Install unknown apps”** for your browser/Files app if prompted.
+3. Tap **Install** → **Open**.
+
+### ▶️ Run the demo (2-minute flow)
+
+1. On the Login screen tap **“One-Tap Demo / Guest Access”** (no backend needed).
+2. Follow the bottom navigation: **Dashboard → Prediction → Devices → Maps → Reports → Profile**.
+3. On **Devices**, tap **+ ADD DEVICE** → fill the form → watch **CONNECTING… → ONLINE • DEMO**.
+4. On **Reports**, tap **DOWNLOAD AUDITED PDF** (saves `CarbonWise_Carbon_Report_YYYY-MM-DD.pdf`).
+5. Try the **AI Optimization Engine** budget slider and the **Action Plan roadmap** on the Dashboard.
+
+### 🔑 Demo credentials (optional)
+
+- Pre-filled on the Login screen: `user@carbonwise.com` / `user123` (needs the live backend; if the server is cold it fails fast with an error — use Guest Access instead).
+- **Guest Access = Demo Mode**, works fully offline.
+
+### ⚠️ Demo Mode limitations (labeled in-app as DEMO MODE / DEMO DATA)
+
+- Devices, grid intensity, forecasts, and GIS layers are **realistic simulated data**, not live telemetry/hardware.
+- Map tiles need a production Google Maps API key (currently a safe dummy key) — markers and the demo GIS layer still render.
+- Real backend login / MQTT / ESP32 hardware are not required for the demo.
+
+---
+
 ## 🏗️ Architecture Overview
 
 ```
